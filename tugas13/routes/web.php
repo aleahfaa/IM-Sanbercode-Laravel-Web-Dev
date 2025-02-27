@@ -11,7 +11,3 @@ Route::get('/register', [FormController::class, 'daftar']);
 Route::get('/welcome', [FormController::class, 'halo']);
 
 Route::post('/welcome', [FormController::class, 'data']);
-
-// Route::get('/master', function(){
-//     return view('layouts.master');
-// });
