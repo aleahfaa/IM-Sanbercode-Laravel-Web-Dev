@@ -1,17 +1,28 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\GenreController;
+use App\Http\Controllers\CommentController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [HomeController::class, 'index']);
+Route::get('/books', [BookController::class, 'index'])->name('books.index');
+Route::get('/books/{book}', [BookController::class, 'show'])->name('books.show');
+Route::get('/genres/{genre}', [GenreController::class, 'show'])->name('genres.show');
 
-Route::get('/home', [HomeController::class, 'index'])->name('home');
-Route::get('books/create', [BookController::class, 'create'])->name('book.create');
-Route::get('books', [BookController::class, 'store'])->name('books.store');
+// Routes Auth
+Auth::routes();
 
+// Admin Routes
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::resource('books', BookController::class);
     Route::resource('genres', GenreController::class);
 });
+
+// Comment Routes for Authenticated Users
+Route::middleware('auth')->post('/books/{book}/comments', [CommentController::class, 'store'])->name('comments.store');
+
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
